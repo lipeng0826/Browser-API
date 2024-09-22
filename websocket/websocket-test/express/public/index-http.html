@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSocket Test</title>
+</head>
+<body>
+    <h1>WebSocket Test</h1>
+    <button id="sendBtn">Send Message</button>
+    <div id="messages"></div>
+
+    <script>
+        // 创建 WebSocket 客户端，连接到 ws://localhost:8080
+        // TODO: 目前还有bug，这个需要接入sockjs来处理其他问题
+        const socket = new WebSocket('https://localhost:8080');
+
+        // 监听连接成功事件
+        socket.onopen = function () {
+            console.log('Connected to WebSocket server.');
+            document.getElementById('messages').innerHTML += '<p>Connected to WebSocket server.</p>';
+        };
+
+        // 监听接收到消息事件
+        socket.onmessage = function (event) {
+            console.log('Message from server:', event.data);
+            document.getElementById('messages').innerHTML += '<p>Message from server: ' + event.data + '</p>';
+        };
+
+        // 监听错误事件
+        socket.onerror = function (error) {
+            console.log('WebSocket error:', error);
+        };
+
+        // 监听连接关闭事件
+        socket.onclose = function () {
+            console.log('WebSocket connection closed.');
+            document.getElementById('messages').innerHTML += '<p>WebSocket connection closed.</p>';
+        };
+
+        // 点击按钮向服务端发送消息
+        document.getElementById('sendBtn').onclick = function () {
+            const message = 'Hello server!';
+            socket.send(message);
+            console.log('Sent to server:', message);
+        };
+    </script>
+</body>
+</html>
