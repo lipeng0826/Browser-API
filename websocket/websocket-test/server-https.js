@@ -37,7 +37,7 @@ echo.on('connection', function(conn) {
   });
 });
 
-echo.installHandlers(server, {prefix:'/ws'});
+echo.installHandlers(server);
 
 // 启动服务器
 server.listen(8080, () => {

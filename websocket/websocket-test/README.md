@@ -38,3 +38,14 @@ openssl x509 -req -days 365 -in server.csr -signkey server.key -out server.crt
     4.启动前端项目
 
 ## 基于以上内容就搭建了一个支持https的websocket环境
+
+## 启动服务端
+
+    cd websocket-test
+    node ./server-https.js
+
+## 启动浏览器端
+
+    cd websocket-test/express
+    node ./server.js
+    打开：https://localhost/index-http.html

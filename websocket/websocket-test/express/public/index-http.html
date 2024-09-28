@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client/dist/sockjs.min.js"></script>
     <title>WebSocket Test</title>
 </head>
 <body>
@@ -11,14 +12,13 @@
     <div id="messages"></div>
 
     <script>
-        // 创建 WebSocket 客户端，连接到 ws://localhost:8080
-        // TODO: 目前还有bug，这个需要接入sockjs来处理其他问题
-        const socket = new WebSocket('https://localhost:8080');
+        // 创建 SockJS 客户端，连接到 /https 前缀
+        const socket = new SockJS('https://localhost:8080');
 
         // 监听连接成功事件
         socket.onopen = function () {
-            console.log('Connected to WebSocket server.');
-            document.getElementById('messages').innerHTML += '<p>Connected to WebSocket server.</p>';
+            console.log('Connected to SockJS server.');
+            document.getElementById('messages').innerHTML += '<p>Connected to SockJS server.</p>';
         };
 
         // 监听接收到消息事件
@@ -29,13 +29,13 @@
 
         // 监听错误事件
         socket.onerror = function (error) {
-            console.log('WebSocket error:', error);
+            console.log('SockJS error:', error);
         };
 
         // 监听连接关闭事件
         socket.onclose = function () {
-            console.log('WebSocket connection closed.');
-            document.getElementById('messages').innerHTML += '<p>WebSocket connection closed.</p>';
+            console.log('SockJS connection closed.');
+            document.getElementById('messages').innerHTML += '<p>SockJS connection closed.</p>';
         };
 
         // 点击按钮向服务端发送消息
