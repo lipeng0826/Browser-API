@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SVG Drag to Modify Path</title>
+    <style>
+        svg {
+            border: 1px solid #ccc;
+            width: 100%;
+            height: 500px;
+        }
+        .draggable {
+            fill: #00f;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<svg id="svgCanvas" viewBox="0 0 500 500">
+    <!-- Path representing a simple bracket -->
+    <path id="bracketPath" d="M100,100 Q150,150 100,200 Q150,250 100,300" stroke="black" fill="transparent" />
+    
+    <!-- Control points for the bracket -->
+    <circle id="controlPoint1" class="draggable" cx="100" cy="150" r="5" />
+    <circle id="controlPoint2" class="draggable" cx="100" cy="250" r="5" />
+
+</svg>
+
+<script>
+    const svgCanvas = document.getElementById("svgCanvas");
+    const bracketPath = document.getElementById("bracketPath");
+    const controlPoint1 = document.getElementById("controlPoint1");
+    const controlPoint2 = document.getElementById("controlPoint2");
+
+    let isDragging = false;
+    let currentControlPoint = null;
+
+    function updatePath() {
+        // Update the path based on control points positions
+        const p1 = controlPoint1.getBoundingClientRect();
+        const p2 = controlPoint2.getBoundingClientRect();
+        
+        const newD = `M100,100 Q${p1.left},${p1.top} 100,200 Q${p2.left},${p2.top} 100,300`;
+        bracketPath.setAttribute("d", newD);
+    }
+
+    // Handle drag start
+    function onDragStart(evt, controlPoint) {
+        isDragging = true;
+        currentControlPoint = controlPoint;
+        svgCanvas.addEventListener("mousemove", onDragMove);
+        svgCanvas.addEventListener("mouseup", onDragEnd);
+    }
+
+    // Handle dragging
+    function onDragMove(evt) {
+        if (isDragging && currentControlPoint) {
+            const svgRect = svgCanvas.getBoundingClientRect();
+            const newX = evt.clientX - svgRect.left;
+            const newY = evt.clientY - svgRect.top;
+            
+            currentControlPoint.setAttribute("cx", newX);
+            currentControlPoint.setAttribute("cy", newY);
+            
+            updatePath();
+        }
+    }
+
+    // Handle drag end
+    function onDragEnd() {
+        isDragging = false;
+        svgCanvas.removeEventListener("mousemove", onDragMove);
+        svgCanvas.removeEventListener("mouseup", onDragEnd);
+    }
+
+    // Attach event listeners to control points
+    controlPoint1.addEventListener("mousedown", (evt) => onDragStart(evt, controlPoint1));
+    controlPoint2.addEventListener("mousedown", (evt) => onDragStart(evt, controlPoint2));
+</script>
+
+</body>
+</html>

@@ -23,7 +23,7 @@
 
         // 监听接收到消息事件
         socket.onmessage = function (event) {
-            console.log('Message from server:', event.data);
+            console.log('Message from server:', event, event.data);
             document.getElementById('messages').innerHTML += '<p>Message from server: ' + event.data + '</p>';
         };
 

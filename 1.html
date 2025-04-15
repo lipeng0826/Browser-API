@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>可拖拽点</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .container {
+            width: 500px;
+            height: 500px;
+            border: 2px solid #000;
+            position: relative;
+        }
+        .draggable {
+            width: 20px;
+            height: 20px;
+            background-color: red;
+            border-radius: 50%;
+            position: absolute;
+            cursor: grab;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="draggable" id="draggable" style="left: 50px; top: 50px;"></div>
+    </div>
+
+    <script>
+        const draggable = document.getElementById("draggable");
+        let offsetX, offsetY, isDragging = false;
+
+        draggable.addEventListener("mousedown", (event) => {
+            isDragging = true;
+            offsetX = event.clientX - draggable.offsetLeft;
+            offsetY = event.clientY - draggable.offsetTop;
+            draggable.style.cursor = "grabbing";
+        });
+
+        document.addEventListener("mousemove", (event) => {
+            if (isDragging) {
+                let x = event.clientX - offsetX;
+                let y = event.clientY - offsetY;
+                const container = draggable.parentElement;
+                
+                // x = Math.max(0, Math.min(container.clientWidth - draggable.clientWidth, x));
+                // y = Math.max(0, Math.min(container.clientHeight - draggable.clientHeight, y));
+                
+                draggable.style.left = `${x}px`;
+                draggable.style.top = `${y}px`;
+            }
+        });
+
+        document.addEventListener("mouseup", () => {
+            isDragging = false;
+            draggable.style.cursor = "grab";
+        });
+    </script>
+</body>
+</html>
